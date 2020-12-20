@@ -1,70 +1,88 @@
 ###################
-What is CodeIgniter
+FUNCIONALIDADES ADCIONAIS
 ###################
 
-CodeIgniter is an Application Development Framework - a toolkit - for people
-who build web sites using PHP. Its goal is to enable you to develop projects
-much faster than you could if you were writing code from scratch, by providing
-a rich set of libraries for commonly needed tasks, as well as a simple
-interface and logical structure to access these libraries. CodeIgniter lets
-you creatively focus on your project by minimizing the amount of code needed
-for a given task.
+Autenticação de usuários baseada no hook
+
+hooks/Authenticate.php
 
 *******************
-Release Information
+Configurações no controller
 *******************
 
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<https://codeigniter.com/download>`_ page.
+É possível definir variáveis **públicas** para controlar a autenticação:
+
+**$needAuth** (bool) - true caso seja necessária a autenticação para acessar o controller, false caso contrário.
+ 
+**$authRedirect** (string) - url de redirecionamento caso seja obrigatória a autenticação para acessar o controller e o usuário esteja deslogado.
+**Formato** controller/método.
+
+<b>$authModel</b> (string) - Padrão: "users_model" - Model de onde são retornadas as informações de usuário.
 
 **************************
-Changelog and New Features
+Métodos do hook
 **************************
 
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
+**static bool is_guest()**
+Retorno: (true, false)
+Retorna true caso o usuário esteja deslogado, false caso contrário.
+
+**static bool getUser()**
+Retorno: (Objeto)
+Retorna o objeto do usuário logado.
+
+**static bool userValue($key)**
+Parâmetros: $key (string) - chave do usuário a ser buscada (exemplo: "nome").
+Retorno: (string, int, float, array...) - retorna o valor salvo do usuário retornado pelo model.
 
 *******************
-Server Requirements
+Alterações no core model
 *******************
 
-PHP version 5.6 or newer is recommended.
+É possível alterar 2 variáveis **protected** do model e assim utilizar suas novas funcionalidades:
 
-It should work on 5.3.7 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
+**protected $table** (string) - nome da tabela que o model utiliza.
+
+**protected primary** (string) - nome da coluna primária da tabela. (padrão **id**).
 
 ************
-Installation
+Métodos adcionados
 ************
 
-Please see the `installation section <https://codeigniter.com/user_guide/installation/index.html>`_
-of the CodeIgniter User Guide.
+**get(string primary, string type='array')** - recebe apenas 1 valor do banco de dados baseado no parâmetro **primary** enviado.
+**ex:** $this->model->get(1);
+**ex:** $this->model->get(2, 'object');
 
-*******
-License
-*******
+**all()** - recebe todos os valores da tabela.
+**ex:** $this->model->all();
 
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
+**setTable(string table)** - seta a tabela na chamada.
+**ex:** $this->model->setTable('tabela')->all();
 
-*********
-Resources
-*********
+**setPrimary(string primary)** - seta a primary key na chamada.
+**ex:** $this->model->setTable('tabela')->setPrimary('id_tabela')->all();
 
--  `User Guide <https://codeigniter.com/docs>`_
--  `Language File Translations <https://github.com/bcit-ci/codeigniter3-translations>`_
--  `Community Forums <http://forum.codeigniter.com/>`_
--  `Community Wiki <https://github.com/bcit-ci/CodeIgniter/wiki>`_
--  `Community Slack Channel <https://codeigniterchat.slack.com>`_
+**attributes(array atributos[])** - seta os atributos retornados na chamada.
+**ex:** $this->model->attributes(['id', 'nome', 'login'])->all();
 
-Report security issues to our `Security Panel <mailto:security@codeigniter.com>`_
-or via our `page on HackerOne <https://hackerone.com/codeigniter>`_, thank you.
+**rawString(string $sql)** - adciona um comando sql sem filtros à query atual.
+**ex:** $this->model->rawString("SELECT * FROM users WHERE id = 1 ");
 
-***************
-Acknowledgement
-***************
+**fetch()** - executa a query atual do model e retorna os valores encontrados.
+**ex**: $this->model->rawString("SELECT * FROM users WHERE id = 1 ")->fetch();
 
-The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
+**where(string $key, string $value, string $op = '=')** - adiciona à query atual parâmetros de busca baseados na **key**, **value**, **op** enviados.
+**ex**: $this->model->where(id, 1)->fetch();
+**ex**: $this->model->where(nome, "user")->where("id", 3, ">")->fetch();
+
+**insert(array $data, bool $returnId)** - insere valores no banco de dados e retorna ou não o id inserido.
+**ex**: $this->model->insert(['nome' => 'user', 'login' => 'user']);
+
+**update(array $data, int $primary)** - altera valores no banco de dados baseado no valor **primary** enviado.
+**ex**: $this->model->update(['nome' => 'user2', 'login' => 'alter'], 1);
+
+**delete(int $primary)** - deleta valores no banco de dados baseado no valor **primary** enviado.
+**ex**: $this->model->delete(1);
+
+**deleteKey(string $key, int $primary)** - deleta valores no banco de dados baseado no valor **primary** da key **$key** enviado.
+**ex**: $this->model->deleteKey("id_parente", 2);
