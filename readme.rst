@@ -9,32 +9,37 @@ hooks/Authenticate.php
 ###################
 Configurações no controller
 ###################
-^
+^^^^^^^^^^^^^^^^^^
 É possível definir variáveis **públicas** para controlar a autenticação:
+^^^^^^^^^^^^^^^^^^
 
 *******************
 **$needAuth** (bool)
 *******************
-^
+^^^^^^^^^^^^^^^^^^^
 true caso seja necessária a autenticação para acessar o controller, false caso contrário.
+^^^^^^^^^^^^^^^^^^
 
 *******************
 **$authRedirect** (string)
 *******************
-^
+^^^^^^^^^^^^^^^^^^^
 url de redirecionamento caso seja obrigatória a autenticação para acessar o controller e o usuário esteja deslogado.
+^^^^^^^^^^^^^^^^^^
 
 *******************
 **Formato** 
 *******************
-^
+^^^^^^^^^^^^^^^^^^^
 controller/método.
+^^^^^^^^^^^^^^^^^^
 
 *******************
 **$authModel** (string)
 *******************
-^
+^^^^^^^^^^^^^^^^^^
 Padrão: "users_model" - Model de onde são retornadas as informações de usuário.
+^^^^^^^^^^^^^^^^^^
 
 ###################
 Métodos do hook
