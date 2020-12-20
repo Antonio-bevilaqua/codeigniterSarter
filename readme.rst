@@ -6,22 +6,39 @@ Autenticação de usuários baseada no hook
 
 hooks/Authenticate.php
 
-*******************
+###################
 Configurações no controller
-*******************
-
+###################
+^
 É possível definir variáveis **públicas** para controlar a autenticação:
 
-**$needAuth** (bool) - true caso seja necessária a autenticação para acessar o controller, false caso contrário.
- 
-**$authRedirect** (string) - url de redirecionamento caso seja obrigatória a autenticação para acessar o controller e o usuário esteja deslogado.
-**Formato** controller/método.
+*******************
+**$needAuth** (bool)
+*******************
+^
+true caso seja necessária a autenticação para acessar o controller, false caso contrário.
 
-<b>$authModel</b> (string) - Padrão: "users_model" - Model de onde são retornadas as informações de usuário.
+*******************
+**$authRedirect** (string)
+*******************
+^
+url de redirecionamento caso seja obrigatória a autenticação para acessar o controller e o usuário esteja deslogado.
 
-**************************
+*******************
+**Formato** 
+*******************
+^
+controller/método.
+
+*******************
+**$authModel** (string)
+*******************
+^
+Padrão: "users_model" - Model de onde são retornadas as informações de usuário.
+
+###################
 Métodos do hook
-**************************
+###################
 
 **static bool is_guest()**
 Retorno: (true, false)
@@ -35,22 +52,24 @@ Retorna o objeto do usuário logado.
 Parâmetros: $key (string) - chave do usuário a ser buscada (exemplo: "nome").
 Retorno: (string, int, float, array...) - retorna o valor salvo do usuário retornado pelo model.
 
-*******************
+###################
 Alterações no core model
-*******************
-
+###################
 É possível alterar 2 variáveis **protected** do model e assim utilizar suas novas funcionalidades:
 
 **protected $table** (string) - nome da tabela que o model utiliza.
 
 **protected primary** (string) - nome da coluna primária da tabela. (padrão **id**).
 
-************
+###################
 Métodos adcionados
-************
+###################
+
 
 **get(string primary, string type='array')** - recebe apenas 1 valor do banco de dados baseado no parâmetro **primary** enviado.
+^
 **ex:** $this->model->get(1);
+^
 **ex:** $this->model->get(2, 'object');
 
 **all()** - recebe todos os valores da tabela.
