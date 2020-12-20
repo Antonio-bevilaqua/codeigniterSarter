@@ -42,7 +42,7 @@ class Authenticate
     }
 
     public static function is_guest(){
-        return self::$user ? true : false;
+        return !self::$user ? true : false;
     }
 
     public static function getUser(){

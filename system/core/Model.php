@@ -397,7 +397,7 @@ class CI_Model {
 	 */
 	public function search(string $key, string $val){
 		$sql = $this->getSql();
-		$sql .= $sql == "" ? "SELECT ".$this->getAttributes()." FROM ".$this->getTable()." WHERE $key LIKE '{$val}' " : "AND $key LIKE '$val' ";
+		$sql .= $sql == "" ? "SELECT ".$this->getAttributes()." FROM ".$this->getTable()." WHERE $key LIKE '%{$val}%' " : "AND $key LIKE '$val' ";
 		$this->setSql($sql);
 		return $this;
 	}
